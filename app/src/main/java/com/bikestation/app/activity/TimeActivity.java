@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.bikestation.app.Lock;
-import com.kdravolin.smartlock.app.R;
+import com.bikestation.app.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

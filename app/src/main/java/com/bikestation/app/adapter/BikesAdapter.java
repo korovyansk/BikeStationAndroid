@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.kdravolin.smartlock.app.R;
+import com.bikestation.app.R;
 import com.bikestation.app.User;
 
 import java.util.ArrayList;

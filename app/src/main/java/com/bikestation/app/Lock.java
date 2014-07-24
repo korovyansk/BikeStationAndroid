@@ -16,7 +16,7 @@ import com.bikestation.app.activity.BikesActivity;
 import com.bikestation.app.activity.InvitationActivity;
 import com.bikestation.app.activity.TimeActivity;
 import com.bikestation.app.adapter.BikesAdapter;
-import com.kdravolin.smartlock.app.R;
+import com.bikestation.app.R;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

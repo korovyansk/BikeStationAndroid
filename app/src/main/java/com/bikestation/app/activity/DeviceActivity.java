@@ -13,7 +13,7 @@ import android.widget.ListView;
 
 import com.bikestation.app.BluetoothWorker;
 import com.bikestation.app.Lock;
-import com.kdravolin.smartlock.app.R;
+import com.bikestation.app.R;
 import com.bikestation.app.adapter.DeviceAdapter;
 
 import butterknife.ButterKnife;
