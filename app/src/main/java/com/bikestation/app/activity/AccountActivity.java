@@ -7,7 +7,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.bikestation.app.R;
 
@@ -29,6 +28,14 @@ public class AccountActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
         ButterKnife.inject(this);
+
+        SharedPreferences settings = getSharedPreferences("bike", 0);
+        String login = settings.getString("login", null);
+        String password = settings.getString("password", null);
+
+        if (login != null){
+            etLogin.setText(login);
+        }
 
         btnEnter.setOnClickListener(new View.OnClickListener() {
             @Override
