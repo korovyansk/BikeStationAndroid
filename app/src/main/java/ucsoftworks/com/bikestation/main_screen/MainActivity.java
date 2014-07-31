@@ -1,7 +1,7 @@
 package ucsoftworks.com.bikestation.main_screen;
 
+import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -11,7 +11,7 @@ import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.web_service.BikeServiceApi;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     @Inject
     BikeServiceApi bikeServiceApi;
