@@ -1,4 +1,4 @@
-package ucsoftworks.com.bikestation;
+package ucsoftworks.com.bikestation.main_screen;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import ucsoftworks.com.bikestation.R;
 
 
 public class MainActivity extends Activity {
