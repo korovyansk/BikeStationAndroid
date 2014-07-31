@@ -5,10 +5,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import javax.inject.Inject;
+
 import ucsoftworks.com.bikestation.R;
+import ucsoftworks.com.bikestation.web_service.BikeServiceApi;
 
 
 public class MainActivity extends ActionBarActivity {
+
+    @Inject
+    BikeServiceApi bikeServiceApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
