@@ -21,11 +21,10 @@ public class BikeApp extends Application {
 
     private ObjectGraph objectGraph;
 
+    final Timer timer = new Timer();
+    
     @Inject
     Bus bus;
-
-
-    final Timer timer = new Timer();
 
     @Override
     public void onCreate() {
