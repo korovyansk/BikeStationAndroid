@@ -22,7 +22,7 @@ public class BikeApp extends Application {
     private ObjectGraph objectGraph;
 
     final Timer timer = new Timer();
-    
+
     @Inject
     Bus bus;
 
@@ -45,7 +45,7 @@ public class BikeApp extends Application {
             public void run() {
                 Log.i("timer", "t");
             }
-        }, 0, 30000);
+        }, 0, 9_989);
     }
 
 
