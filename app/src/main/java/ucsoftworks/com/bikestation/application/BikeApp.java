@@ -1,4 +1,4 @@
-package ucsoftworks.com.bikestation;
+package ucsoftworks.com.bikestation.application;
 
 import android.app.Application;
 import android.util.Log;

@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ucsoftworks.com.bikestation.BikeApp;
+import ucsoftworks.com.bikestation.application.BikeApp;
 import ucsoftworks.com.bikestation.main_screen.MainActivity;
 import ucsoftworks.com.bikestation.web_service.BikeApi;
 import ucsoftworks.com.bikestation.web_service.BikeServiceApi;
