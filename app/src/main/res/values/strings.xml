@@ -7,5 +7,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="smart_bikes">Smart Bikes</string>
     <string name="smart_bikes_logo">Smart Bikes Logo</string>
+    <string name="end_of_landing">Спасибо! Ваш прокат завершён!</string>
 
 </resources>
