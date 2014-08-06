@@ -8,5 +8,8 @@
     <string name="smart_bikes">Smart Bikes</string>
     <string name="smart_bikes_logo">Smart Bikes Logo</string>
     <string name="end_of_landing">Спасибо! Ваш прокат завершён!</string>
+    <string name="land_time">Время проката:</string>
+    <string name="distance">Дистанция:</string>
+    <string name="cost">Стоимость:</string>
 
 </resources>
