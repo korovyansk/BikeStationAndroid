@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
     public void onStartRent(StartBikeRentEvent startBikeRentEvent) {
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, new MainFragment())
+                .replace(R.id.container, MainFragment.newInstance(startBikeRentEvent.getUsername(), startBikeRentEvent.getRentDate(), startBikeRentEvent.getCost()))
                 .commit();
     }
 
