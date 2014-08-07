@@ -3,14 +3,16 @@ package ucsoftworks.com.bikestation.main_screen;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.squareup.otto.Bus;
-import com.squareup.otto.Subscribe;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -18,7 +20,6 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.application.BikeApp;
-import ucsoftworks.com.bikestation.events.TimerEvent;
 import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 
 /**
@@ -31,8 +32,9 @@ public class MainFragment extends Fragment {
     private static final String ARG_USERNAME = "username";
     private static final String ARG_RENT_TIME = "rentTime";
     private static final String ARG_COST = "cost";
-    @Inject
-    Bus bus;
+    private final Timer timer = new Timer();
+    private final Time time = new Time();
+
     @Inject
     GeolocationService geolocationService;
     @InjectView(R.id.username)
@@ -50,6 +52,22 @@ public class MainFragment extends Fragment {
     private String username;
     private Time rentTime;
     private Float cost;
+    public Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            int hours, minutes, seconds;
+            time.setToNow();
+            long difference = time.toMillis(false) - rentTime.toMillis(false);
+            hours = (int) (difference / (1000 * 60 * 60));
+            minutes = (int) (difference - (1000 * 60 * 60 * hours)) / (1000 * 60);
+            seconds = (int) (difference - (1000 * 60 * 60 * hours) - (1000 * 60 * minutes)) / 1000;
+
+            speedField.setText(String.valueOf(geolocationService.getSpeed()) + " км/ч");
+            avgSpeedField.setText(String.valueOf(geolocationService.getAvgSpeed()) + " км/ч");
+            distanceField.setText(String.valueOf(geolocationService.getDistance()) + " км");
+            costField.setText(String.valueOf((int) (cost * difference / (1000 * 60 * 60))) + " рублей");
+            timeField.setText(String.format("%d:%2d:%2d", hours, minutes, seconds));
+        }
+    };
 
     public MainFragment() {
         // Required empty public constructor
@@ -77,9 +95,6 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        BikeApp bikeApp = (BikeApp) getActivity().getApplication();
-        bikeApp.inject(this);
-        bus.register(this);
 
         if (getArguments() != null) {
             username = getArguments().getString(ARG_USERNAME);
@@ -93,15 +108,31 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        BikeApp bikeApp = (BikeApp) getActivity().getApplication();
+        bikeApp.inject(this);
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         ButterKnife.inject(this, view);
+
+        usernameField.setText(username);
 
         return view;
     }
 
-    @Subscribe
-    void onTimer(TimerEvent event) {
-        //
+    @Override
+    public void onStart() {
+        super.onStart();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                mHandler.obtainMessage(1).sendToTarget();
+            }
+        }, 0, 999);
+    }
+
+    @Override
+    public void onStop() {
+        timer.cancel();
+        super.onStop();
     }
 
 

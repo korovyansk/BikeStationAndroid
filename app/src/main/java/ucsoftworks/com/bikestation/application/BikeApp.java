@@ -29,7 +29,7 @@ public class BikeApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        objectGraph = ObjectGraph.create(new MockAppModule(this), new AppModule());
+        objectGraph = ObjectGraph.create(new MockAppModule(), new AppModule());
         inject(this);
 
         set30SecTimer();
@@ -43,7 +43,7 @@ public class BikeApp extends Application {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                bus.post(new TimerEvent());
+//                bus.post(new TimerEvent());
             }
         }, 0, 999);
     }

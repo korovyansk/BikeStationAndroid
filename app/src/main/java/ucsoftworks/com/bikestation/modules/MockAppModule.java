@@ -4,7 +4,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ucsoftworks.com.bikestation.application.BikeApp;
 import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 import ucsoftworks.com.bikestation.geolocation.MockGeoLocator;
 import ucsoftworks.com.bikestation.web_service.BikeServiceApi;
@@ -20,12 +19,6 @@ import ucsoftworks.com.bikestation.web_service.MockBikeApi;
         overrides = true
 )
 public class MockAppModule {
-    BikeApp bikeApp;
-
-    public MockAppModule(BikeApp bikeApp) {
-        this.bikeApp = bikeApp;
-    }
-
     @Provides
     @Singleton
     BikeServiceApi provideBikeService() {
@@ -34,6 +27,6 @@ public class MockAppModule {
 
     @Provides
     GeolocationService provideGeolocationService() {
-        return new MockGeoLocator(bikeApp);
+        return new MockGeoLocator();
     }
 }

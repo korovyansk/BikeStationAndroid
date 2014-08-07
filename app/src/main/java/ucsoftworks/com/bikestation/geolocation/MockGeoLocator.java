@@ -4,6 +4,8 @@ import com.google.common.eventbus.Subscribe;
 import com.squareup.otto.Bus;
 
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -15,21 +17,25 @@ import ucsoftworks.com.bikestation.events.TimerEvent;
  */
 public class MockGeoLocator implements GeolocationService {
 
+
     private final Random random = new Random();
-    @Inject
-    Bus bus;
     private float distance = 0, speed = 0, avgSpeed = 0, time = 0;
 
-    public MockGeoLocator(BikeApp bikeApp) {
-        bikeApp.inject(this);
-        bus.register(this);
+    public MockGeoLocator() {
+        final Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                onTimer();
+            }
+        }, 0, 999);
+
     }
 
-    @Subscribe
-    void onTimer(TimerEvent event) {
+    void onTimer() {
         speed = random.nextFloat() * 5;
-        distance += speed / 3_600;
-        time += 1 / 3_600;
+        distance += speed / 3_600.0;
+        time += 1.0 / 3_600;
         avgSpeed = distance / time;
     }
 
