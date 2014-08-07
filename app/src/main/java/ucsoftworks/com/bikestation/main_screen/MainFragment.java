@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 import javax.inject.Inject;
 
@@ -17,6 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.application.BikeApp;
+import ucsoftworks.com.bikestation.events.TimerEvent;
 import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 
 /**
@@ -95,6 +97,11 @@ public class MainFragment extends Fragment {
         ButterKnife.inject(this, view);
 
         return view;
+    }
+
+    @Subscribe
+    void onTimer(TimerEvent event) {
+        //
     }
 
 
