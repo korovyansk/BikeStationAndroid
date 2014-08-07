@@ -17,15 +17,9 @@ import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.application.BikeApp;
 import ucsoftworks.com.bikestation.events.StartBikeRentEvent;
 import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
-import ucsoftworks.com.bikestation.web_service.BikeServiceApi;
 
 
 public class MainActivity extends Activity {
-
-    private static final String START_FRAGMENT = "START_FRAGMENT", MAIN_FRAGMENT = "MAIN_FRAGMENT", END_FRAGMENT = "END_FRAGMENT";
-
-    @Inject
-    BikeServiceApi bikeServiceApi;
 
     @Inject
     Bus bus;
@@ -44,7 +38,6 @@ public class MainActivity extends Activity {
         fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .add(R.id.container, new TitleFragment())
-                .addToBackStack(START_FRAGMENT)
                 .commit();
     }
 
