@@ -61,11 +61,11 @@ public class MainFragment extends Fragment {
             minutes = (int) (difference - (1000 * 60 * 60 * hours)) / (1000 * 60);
             seconds = (int) (difference - (1000 * 60 * 60 * hours) - (1000 * 60 * minutes)) / 1000;
 
-            speedField.setText(String.valueOf(geolocationService.getSpeed()) + " км/ч");
-            avgSpeedField.setText(String.valueOf(geolocationService.getAvgSpeed()) + " км/ч");
-            distanceField.setText(String.valueOf(geolocationService.getDistance()) + " км");
-            costField.setText(String.valueOf((int) (cost * difference / (1000 * 60 * 60))) + " рублей");
-            timeField.setText(String.format("%d:%2d:%2d", hours, minutes, seconds));
+            speedField.setText(String.format("%.2f %s", geolocationService.getSpeed(), "км/ч"));
+            avgSpeedField.setText(String.format("%.2f %s", geolocationService.getAvgSpeed(), "км/ч"));
+            distanceField.setText(String.format("%.3f %s", geolocationService.getDistance(), "км"));
+            costField.setText(String.format("%.2f %s", cost * difference / (1000 * 60 * 60), "р."));
+            timeField.setText(String.format("%d:%02d:%02d", hours, minutes, seconds));
         }
     };
 
