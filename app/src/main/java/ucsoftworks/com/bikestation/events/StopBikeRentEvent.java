@@ -1,5 +1,7 @@
 package ucsoftworks.com.bikestation.events;
 
+import android.text.format.Time;
+
 import java.util.Date;
 
 /**
@@ -7,15 +9,15 @@ import java.util.Date;
  */
 
 public class StopBikeRentEvent {
-    Date stopRentDate;
+    Time stopRentDate;
     float totalCost;
 
-    public StopBikeRentEvent(Date stopRentDate, float totalCost) {
+    public StopBikeRentEvent(Time stopRentDate, float totalCost) {
         this.stopRentDate = stopRentDate;
         this.totalCost = totalCost;
     }
 
-    public Date getStopRentDate() {
+    public Time getStopRentDate() {
         return stopRentDate;
     }
 

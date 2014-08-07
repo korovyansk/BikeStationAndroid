@@ -1,5 +1,7 @@
 package ucsoftworks.com.bikestation.events;
 
+import android.text.format.Time;
+
 import java.util.Date;
 
 /**
@@ -8,10 +10,10 @@ import java.util.Date;
 public class StartBikeRentEvent {
 
     private String username;
-    private Date rentDate;
+    private Time rentDate;
     private float cost;
 
-    public StartBikeRentEvent(String username, Date rentDate, float cost) {
+    public StartBikeRentEvent(String username, Time rentDate, float cost) {
         this.username = username;
         this.rentDate = rentDate;
         this.cost = cost;
@@ -21,7 +23,7 @@ public class StartBikeRentEvent {
         return username;
     }
 
-    public Date getRentDate() {
+    public Time getRentDate() {
         return rentDate;
     }
 
