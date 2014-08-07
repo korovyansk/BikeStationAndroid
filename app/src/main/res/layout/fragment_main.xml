@@ -23,13 +23,23 @@
             android:layout_height="wrap_content">
 
             <LinearLayout
-                android:layout_width="200dp"
+                android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/land_time"
+                    android:textSize="25sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/speed"
+                    android:textSize="25sp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/avg_speed"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="match_parent"
@@ -53,6 +63,18 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/time_label"
                     android:text="00:43:21"
+                    android:textSize="25sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/speed_label"
+                    android:text="3 км/ч"
+                    android:textSize="25sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/avg_speed_label"
+                    android:text="5 км/ч"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="wrap_content"

@@ -11,5 +11,7 @@
     <string name="land_time">Время проката:</string>
     <string name="distance">Дистанция:</string>
     <string name="cost">Стоимость:</string>
+    <string name="speed">Скорость:</string>
+    <string name="avg_speed">Средняя скорость:</string>
 
 </resources>
