@@ -8,7 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
+
 import ucsoftworks.com.bikestation.R;
+import ucsoftworks.com.bikestation.application.BikeApp;
+import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,7 +26,10 @@ public class MainFragment extends Fragment {
     private static final String ARG_USERNAME = "username";
     private static final String ARG_RENT_TIME = "rentTime";
     private static final String ARG_COST = "cost";
-
+    @Inject
+    Bus bus;
+    @Inject
+    GeolocationService geolocationService;
     private String username;
     private Time rentTime;
     private Float cost;
@@ -52,6 +61,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        BikeApp bikeApp = (BikeApp) getActivity().getApplication();
+        bikeApp.inject(this);
+        bus.register(this);
+
         if (getArguments() != null) {
             username = getArguments().getString(ARG_USERNAME);
             rentTime = new Time();
