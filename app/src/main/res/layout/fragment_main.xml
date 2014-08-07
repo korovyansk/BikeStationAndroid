@@ -62,31 +62,31 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/time_label"
-                    android:text="00:43:21"
+                    android:text="00:00:00"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/speed_label"
-                    android:text="3 км/ч"
+                    android:text="0 км/ч"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/avg_speed_label"
-                    android:text="5 км/ч"
+                    android:text="0 км/ч"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/distance_label"
-                    android:text="5 км"
+                    android:text="0 км"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cost_label"
-                    android:text="120 рублей"
+                    android:text="0 рублей"
                     android:textSize="25sp"/>
                 </LinearLayout>
             </LinearLayout>
