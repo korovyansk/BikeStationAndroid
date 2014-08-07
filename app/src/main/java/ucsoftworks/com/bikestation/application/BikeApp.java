@@ -1,7 +1,6 @@
 package ucsoftworks.com.bikestation.application;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.squareup.otto.Bus;
 
@@ -11,6 +10,7 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
+import ucsoftworks.com.bikestation.events.TimerEvent;
 import ucsoftworks.com.bikestation.modules.AppModule;
 import ucsoftworks.com.bikestation.modules.MockAppModule;
 
@@ -29,13 +29,13 @@ public class BikeApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        objectGraph = ObjectGraph.create(new MockAppModule(), new AppModule());
-        injectToObjectGraph(this);
+        objectGraph = ObjectGraph.create(new MockAppModule(this), new AppModule());
+        inject(this);
 
         set30SecTimer();
     }
 
-    public void injectToObjectGraph(Object object) {
+    public void inject(Object object) {
         objectGraph.inject(object);
     }
 
@@ -43,9 +43,9 @@ public class BikeApp extends Application {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                Log.i("timer", "t");
+                bus.post(new TimerEvent());
             }
-        }, 0, 9_989);
+        }, 0, 999);
     }
 
 
