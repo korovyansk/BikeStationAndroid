@@ -7,11 +7,14 @@ import android.text.format.Time;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.squareup.otto.Bus;
 
 import javax.inject.Inject;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.application.BikeApp;
 import ucsoftworks.com.bikestation.geolocation.GeolocationService;
@@ -30,10 +33,21 @@ public class MainFragment extends Fragment {
     Bus bus;
     @Inject
     GeolocationService geolocationService;
+    @InjectView(R.id.username)
+    TextView usernameField;
+    @InjectView(R.id.time_label)
+    TextView timeField;
+    @InjectView(R.id.speed_label)
+    TextView speedField;
+    @InjectView(R.id.avg_speed_label)
+    TextView avgSpeedField;
+    @InjectView(R.id.distance_label)
+    TextView distanceField;
+    @InjectView(R.id.cost_label)
+    TextView costField;
     private String username;
     private Time rentTime;
     private Float cost;
-
 
     public MainFragment() {
         // Required empty public constructor
@@ -77,7 +91,10 @@ public class MainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        ButterKnife.inject(this, view);
+
+        return view;
     }
 
 
