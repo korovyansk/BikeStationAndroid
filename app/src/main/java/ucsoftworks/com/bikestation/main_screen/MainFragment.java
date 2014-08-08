@@ -131,7 +131,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onStop() {
-        timer.cancel();
+        timer.purge();
         super.onStop();
     }
 
