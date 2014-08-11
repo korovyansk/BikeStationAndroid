@@ -52,12 +52,14 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onStart() {
+        super.onStart();
         bus.register(this);
     }
 
     @Override
     protected void onStop() {
         bus.unregister(this);
+        super.onStop();
     }
 
     @Subscribe
