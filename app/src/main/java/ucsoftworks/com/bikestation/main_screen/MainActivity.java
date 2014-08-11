@@ -41,13 +41,23 @@ public class MainActivity extends Activity {
 
         BikeApp bikeApp = (BikeApp) getApplication();
         bikeApp.inject(this);
-        bus.register(this);
 
         fragmentManager = getFragmentManager();
 
         if (savedInstanceState == null) fragmentManager.beginTransaction()
                 .add(R.id.container, new TitleFragment())
                 .commit();
+    }
+
+
+    @Override
+    protected void onStart() {
+        bus.register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        bus.unregister(this);
     }
 
     @Subscribe
