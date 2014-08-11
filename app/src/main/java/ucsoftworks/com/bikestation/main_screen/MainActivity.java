@@ -19,6 +19,15 @@ import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
 
 public class MainActivity extends Activity {
 
+    public static final String TAG = "GcmDemo";
+
+    private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    public static final String EXTRA_MESSAGE = "message";
+    public static final String PROPERTY_REG_ID = "registration_id";
+    private static final String PROPERTY_APP_VERSION = "appVersion";
+    public static final String NOTIFICATION = "notification";
+
+
     private static final String IS_ENTRY_SCREEN_KEY = "isEntryScreen";
 
     @Inject
