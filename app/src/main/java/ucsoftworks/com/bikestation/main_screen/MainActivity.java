@@ -27,14 +27,10 @@ public class MainActivity extends Activity {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     public static final String NOTIFICATION = "notification";
 
-
-    private static final String IS_ENTRY_SCREEN_KEY = "isEntryScreen";
-
     @Inject
     Bus bus;
 
     private FragmentManager fragmentManager;
-    private boolean isEntryScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +45,13 @@ public class MainActivity extends Activity {
 
         fragmentManager = getFragmentManager();
 
-        if (savedInstanceState != null) {
-            isEntryScreen = savedInstanceState.getBoolean(IS_ENTRY_SCREEN_KEY, true);
-        }
-        if (isEntryScreen) fragmentManager.beginTransaction()
+        if (savedInstanceState == null) fragmentManager.beginTransaction()
                 .add(R.id.container, new TitleFragment())
                 .commit();
     }
 
-
-    @Override
-    protected void onSaveInstanceState(android.os.Bundle outState) {
-        outState.putBoolean(IS_ENTRY_SCREEN_KEY, isEntryScreen);
-        super.onSaveInstanceState(outState);
-    }
-
     @Subscribe
     public void onStartRent(StartBikeRentEvent startBikeRentEvent) {
-        isEntryScreen = false;
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance(startBikeRentEvent.getUsername(), startBikeRentEvent.getRentDate(), startBikeRentEvent.getCost()))
@@ -75,7 +60,6 @@ public class MainActivity extends Activity {
 
     @Subscribe
     public void onStopRent(StopBikeRentEvent stopBikeRentEvent) {
-        isEntryScreen = false;
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, new EndFragment())

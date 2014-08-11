@@ -96,12 +96,22 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            username = getArguments().getString(ARG_USERNAME);
-            rentTime = new Time();
-            rentTime.set(getArguments().getLong(ARG_RENT_TIME));
-            cost = getArguments().getFloat(ARG_COST);
-        }
+        rentTime = new Time();
+        initFromArguments(savedInstanceState == null ? getArguments() : savedInstanceState);
+    }
+
+    private void initFromArguments(Bundle bundle) {
+        username = bundle.getString(ARG_USERNAME);
+        rentTime.set(bundle.getLong(ARG_RENT_TIME));
+        cost = bundle.getFloat(ARG_COST);
+    }
+
+    @Override
+    public void onSaveInstanceState(android.os.Bundle outState) {
+        outState.putString(ARG_USERNAME, username);
+        outState.putFloat(ARG_COST, cost);
+        outState.putLong(ARG_RENT_TIME, rentTime.toMillis(false));
+        super.onSaveInstanceState(outState);
     }
 
     @Override

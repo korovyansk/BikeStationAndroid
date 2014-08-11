@@ -28,7 +28,7 @@
         </receiver>
 
         <service android:name=".gcm.GcmIntentService" />
-        
+
         <activity
             android:name=".main_screen.MainActivity"
             android:screenOrientation="landscape"
