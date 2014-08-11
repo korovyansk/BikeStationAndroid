@@ -5,8 +5,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuItem;
 
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
@@ -21,15 +19,18 @@ import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
 
 public class MainActivity extends Activity {
 
+    private static final String IS_ENTRY_SCREEN_KEY = "isEntryScreen";
+
     @Inject
     Bus bus;
 
     private FragmentManager fragmentManager;
+    private boolean isEntryScreen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getActionBar()!=null)
+        if (getActionBar() != null)
             getActionBar().hide();
         setContentView(R.layout.activity_main);
 
@@ -38,13 +39,25 @@ public class MainActivity extends Activity {
         bus.register(this);
 
         fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
+
+        if (savedInstanceState != null) {
+            isEntryScreen = savedInstanceState.getBoolean(IS_ENTRY_SCREEN_KEY, true);
+        }
+        if (isEntryScreen) fragmentManager.beginTransaction()
                 .add(R.id.container, new TitleFragment())
                 .commit();
     }
 
+
+    @Override
+    protected void onSaveInstanceState(android.os.Bundle outState) {
+        outState.putBoolean(IS_ENTRY_SCREEN_KEY, isEntryScreen);
+        super.onSaveInstanceState(outState);
+    }
+
     @Subscribe
     public void onStartRent(StartBikeRentEvent startBikeRentEvent) {
+        isEntryScreen = false;
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, MainFragment.newInstance(startBikeRentEvent.getUsername(), startBikeRentEvent.getRentDate(), startBikeRentEvent.getCost()))
@@ -53,6 +66,7 @@ public class MainActivity extends Activity {
 
     @Subscribe
     public void onStopRent(StopBikeRentEvent stopBikeRentEvent) {
+        isEntryScreen = false;
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, new EndFragment())
