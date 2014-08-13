@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.application.BikeApp;
+import ucsoftworks.com.bikestation.application.SharedPreferencesManager;
 import ucsoftworks.com.bikestation.events.StartBikeRentEvent;
 import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
 
@@ -29,6 +30,10 @@ public class MainActivity extends Activity {
 
     @Inject
     Bus bus;
+
+    @Inject
+    SharedPreferencesManager sharedPreferencesManager;
+
 
     private FragmentManager fragmentManager;
 

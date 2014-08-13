@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import ucsoftworks.com.bikestation.application.BikeApp;
+import ucsoftworks.com.bikestation.application.SharedPreferencesManager;
 import ucsoftworks.com.bikestation.geolocation.GPSTracker;
 import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 import ucsoftworks.com.bikestation.main_screen.MainActivity;
@@ -50,6 +51,11 @@ public class AppModule {
     @Provides
     GPSTracker provideGPSTracker() {
         return new GPSTracker(bikeApp);
+    }
+
+    @Provides
+    SharedPreferencesManager ProvideSharedPreferencesManager() {
+        return new SharedPreferencesManager(bikeApp);
     }
 
 }
