@@ -263,7 +263,7 @@ public class MainActivity extends Activity {
      */
     private void sendRegistrationIdToBackend() {
         try {
-            String uri = "http://smartbike.herokuapp.com/api/v1/bikes/register";
+            String uri = "http://smart-bikes.herokuapp.com/api/v1/bikes/register";
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(uri);
 
