@@ -19,7 +19,7 @@ public class SharedPreferencesManager {
     }
 
     public String getRegId() {
-        return sharedPreferences.getString(ID_KEY, null);
+        return sharedPreferences.getString(ID_KEY, "");
     }
 
     public void setRegId(String RegId) {
