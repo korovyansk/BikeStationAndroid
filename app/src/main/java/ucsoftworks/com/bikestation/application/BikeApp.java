@@ -10,7 +10,6 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
-import ucsoftworks.com.bikestation.events.TimerEvent;
 import ucsoftworks.com.bikestation.modules.AppModule;
 import ucsoftworks.com.bikestation.modules.MockAppModule;
 
@@ -29,7 +28,7 @@ public class BikeApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        objectGraph = ObjectGraph.create(new MockAppModule(), new AppModule());
+        objectGraph = ObjectGraph.create(new MockAppModule(), new AppModule(this));
         inject(this);
 
         set30SecTimer();
