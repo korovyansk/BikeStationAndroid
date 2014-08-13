@@ -7,7 +7,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 
-public class GPSTracker implements LocationListener {
+public class GPSTracker implements LocationListener, GeolocationService {
 
     private final Context mContext;
 
@@ -21,7 +21,7 @@ public class GPSTracker implements LocationListener {
     boolean canGetLocation = false;
 
     Location mLocation; // mLocation
-    double mDistance;
+    float mDistance;
 
     // The minimum distance to change Updates in meters
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
@@ -38,12 +38,7 @@ public class GPSTracker implements LocationListener {
         init();
     }
 
-    /**
-     * Function to get the user's current mLocation
-     *
-     * @return
-     */
-    public Location init() {
+    public void init() {
         try {
             locationManager = (LocationManager) mContext
                     .getSystemService(Context.LOCATION_SERVICE);
@@ -95,23 +90,12 @@ public class GPSTracker implements LocationListener {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return mLocation;
-    }
-
-    /**
-     * Stop using GPS listener Calling this function will stop using GPS in your
-     * app
-     */
-    public void stopUsingGPS() {
-        if (locationManager != null) {
-            locationManager.removeUpdates(GPSTracker.this);
-        }
     }
 
     /**
      * Function to get latitude
      */
+    @Override
     public double getLatitude() {
         return mLocation != null ? mLocation.getLatitude() : -1;
     }
@@ -119,6 +103,7 @@ public class GPSTracker implements LocationListener {
     /**
      * Function to get longitude
      */
+    @Override
     public double getLongitude() {
         return mLocation != null ? mLocation.getLongitude() : -1;
     }
@@ -126,7 +111,8 @@ public class GPSTracker implements LocationListener {
     /**
      * Function to get distance
      */
-    public double getDistance() {
+    @Override
+    public float getDistance() {
         return mDistance;
     }
 

@@ -9,7 +9,6 @@ import dagger.Module;
 import dagger.Provides;
 import ucsoftworks.com.bikestation.application.BikeApp;
 import ucsoftworks.com.bikestation.geolocation.GPSTracker;
-import ucsoftworks.com.bikestation.geolocation.GeoLocator;
 import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 import ucsoftworks.com.bikestation.main_screen.MainActivity;
 import ucsoftworks.com.bikestation.main_screen.MainFragment;
@@ -20,7 +19,7 @@ import ucsoftworks.com.bikestation.web_service.BikeServiceApi;
  * Created by Pasenchuk Victor on 28.07.14 in IntelliJ Idea
  */
 
-@Module(injects = {BikeApp.class, MainActivity.class, MainFragment.class, GeoLocator.class}, library = true)
+@Module(injects = {BikeApp.class, MainActivity.class, MainFragment.class}, library = true)
 public class AppModule {
 
     private BikeApp bikeApp;
@@ -44,7 +43,7 @@ public class AppModule {
 
     @Provides
     GeolocationService provideGeolocationService() {
-        return new GeoLocator();
+        return new GPSTracker(bikeApp);
     }
 
 
