@@ -28,7 +28,7 @@ public class BikeApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        objectGraph = ObjectGraph.create(new MockAppModule(), new AppModule(this));
+        objectGraph = ObjectGraph.create(new MockAppModule());
         inject(this);
 
         set30SecTimer();
