@@ -5,6 +5,6 @@ package ucsoftworks.com.bikestation.geolocation;
  */
 public interface GeolocationService {
     public float getDistance();
-    public float getSpeed();
-    public float getAvgSpeed();
+    public double getLatitude();
+    public double getLongitude();
 }

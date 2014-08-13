@@ -1,16 +1,8 @@
 package ucsoftworks.com.bikestation.geolocation;
 
-import com.google.common.eventbus.Subscribe;
-import com.squareup.otto.Bus;
-
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import javax.inject.Inject;
-
-import ucsoftworks.com.bikestation.application.BikeApp;
-import ucsoftworks.com.bikestation.events.TimerEvent;
 
 /**
  * Created by Pasenchuk Victor on 07.08.14
@@ -19,7 +11,8 @@ public class MockGeoLocator implements GeolocationService {
 
 
     private final Random random = new Random();
-    private float distance = 0, speed = 0, avgSpeed = 0, time = 0;
+    private float distance = 0;
+    private float time = 0;
 
     public MockGeoLocator() {
         final Timer timer = new Timer();
@@ -33,10 +26,9 @@ public class MockGeoLocator implements GeolocationService {
     }
 
     void onTimer() {
-        speed = random.nextFloat() * 5;
+        float speed = random.nextFloat() * 5;
         distance += speed / 3_600.0;
         time += 1.0 / 3_600;
-        avgSpeed = distance / time;
     }
 
     @Override
@@ -45,12 +37,13 @@ public class MockGeoLocator implements GeolocationService {
     }
 
     @Override
-    public float getSpeed() {
-        return speed;
+    public double getLatitude() {
+        return 0;
     }
 
     @Override
-    public float getAvgSpeed() {
-        return avgSpeed;
+    public double getLongitude() {
+        return 0;
     }
+
 }

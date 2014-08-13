@@ -10,12 +10,13 @@ public class GeoLocator implements GeolocationService {
     }
 
     @Override
-    public float getSpeed() {
+    public double getLatitude() {
         return 0;
     }
 
     @Override
-    public float getAvgSpeed() {
+    public double getLongitude() {
         return 0;
     }
+
 }

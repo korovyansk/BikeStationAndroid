@@ -41,10 +41,6 @@ public class MainFragment extends Fragment {
     TextView usernameField;
     @InjectView(R.id.time_label)
     TextView timeField;
-    @InjectView(R.id.speed_label)
-    TextView speedField;
-    @InjectView(R.id.avg_speed_label)
-    TextView avgSpeedField;
     @InjectView(R.id.distance_label)
     TextView distanceField;
     @InjectView(R.id.cost_label)
@@ -61,8 +57,6 @@ public class MainFragment extends Fragment {
             minutes = (int) (difference - (1000 * 60 * 60 * hours)) / (1000 * 60);
             seconds = (int) (difference - (1000 * 60 * 60 * hours) - (1000 * 60 * minutes)) / 1000;
 
-            speedField.setText(String.format("%.2f %s", geolocationService.getSpeed(), "км/ч"));
-            avgSpeedField.setText(String.format("%.2f %s", geolocationService.getAvgSpeed(), "км/ч"));
             distanceField.setText(String.format("%.3f %s", geolocationService.getDistance(), "км"));
             costField.setText(String.format("%.2f %s", cost * difference / (1000 * 60 * 60), "р."));
             timeField.setText(String.format("%d:%02d:%02d", hours, minutes, seconds));

@@ -34,16 +34,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/speed"
-                    android:textSize="25sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/avg_speed"
-                    android:textSize="25sp"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="@string/distance"
                     android:textSize="25sp"/>
                 <TextView
@@ -63,18 +53,6 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/time_label"
                     android:text="00:00:00"
-                    android:textSize="25sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/speed_label"
-                    android:text="0 км/ч"
-                    android:textSize="25sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/avg_speed_label"
-                    android:text="0 км/ч"
                     android:textSize="25sp"/>
                 <TextView
                     android:layout_width="wrap_content"
