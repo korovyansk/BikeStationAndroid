@@ -163,7 +163,7 @@ public class MainActivity extends Activity {
     private void stopRent() {
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, EndFragment.newInstance(mStopBikeRentEvent.getRentDate(), mStopBikeRentEvent.getStopRentDate(), mStartBikeRentEvent.getCost()))
+                .replace(R.id.container, EndFragment.newInstance(mStopBikeRentEvent.getRentDate(), mStopBikeRentEvent.getStopRentDate(), mStopBikeRentEvent.getTotalCost()))
                 .commit();
     }
 

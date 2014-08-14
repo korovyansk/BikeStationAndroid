@@ -44,16 +44,6 @@ public class EndFragment extends Fragment {
 
     public EndFragment() {
         // Required empty public constructor
-
-        BikeApp bikeApp = (BikeApp) getActivity().getApplication();
-        bikeApp.inject(this);
-
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                bus.post(new FinishTimeOutEvent());
-            }
-        }, 300_000);
     }
 
     public static EndFragment newInstance(long rentTime, long endRentTime, float cost) {
@@ -93,6 +83,17 @@ public class EndFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        BikeApp bikeApp = (BikeApp) getActivity().getApplication();
+        bikeApp.inject(this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                bus.post(new FinishTimeOutEvent());
+            }
+        }, 300_000);
+
         View view = inflater.inflate(R.layout.fragment_end, container, false);
         ButterKnife.inject(this, view);
 
