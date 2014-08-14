@@ -12,9 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
-import android.text.format.Time;
 import android.util.Log;
-import android.view.KeyEvent;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -41,6 +39,7 @@ import javax.inject.Inject;
 import ucsoftworks.com.bikestation.R;
 import ucsoftworks.com.bikestation.application.BikeApp;
 import ucsoftworks.com.bikestation.application.SharedPreferencesManager;
+import ucsoftworks.com.bikestation.events.FinishTimeOutEvent;
 import ucsoftworks.com.bikestation.events.StartBikeRentEvent;
 import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
 
@@ -134,6 +133,14 @@ public class MainActivity extends Activity {
         stopHandler.obtainMessage(1).sendToTarget();
     }
 
+    @Subscribe
+    public void onFinishTimeOut(FinishTimeOutEvent finishTimeOutEvent) {
+        fragmentManager.popBackStack();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, new TitleFragment())
+                .commit();
+    }
+
     private Handler startHandler = new Handler() {
         public void handleMessage(Message msg) {
             startRent();
@@ -156,7 +163,7 @@ public class MainActivity extends Activity {
     private void stopRent() {
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, new EndFragment())
+                .replace(R.id.container, EndFragment.newInstance(mStopBikeRentEvent.getRentDate(), mStopBikeRentEvent.getStopRentDate(), mStartBikeRentEvent.getCost()))
                 .commit();
     }
 
