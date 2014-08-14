@@ -9,6 +9,8 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.telephony.TelephonyManager;
 import android.text.format.Time;
 import android.util.Log;
@@ -50,10 +52,13 @@ public class MainActivity extends Activity {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String NOTIFICATION = "notification";
 
-    String SENDER_ID = "895458163781";
+    private static final String SENDER_ID = "895458163781";
 
-    GoogleCloudMessaging gcm;
-    String regId;
+    private GoogleCloudMessaging gcm;
+    private String regId;
+
+    private StartBikeRentEvent mStartBikeRentEvent;
+    private StopBikeRentEvent mStopBikeRentEvent;
 
     @Inject
     Bus bus;
@@ -118,14 +123,37 @@ public class MainActivity extends Activity {
 
     @Subscribe
     public void onStartRent(StartBikeRentEvent startBikeRentEvent) {
-        fragmentManager.popBackStack();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, MainFragment.newInstance(startBikeRentEvent.getUsername(), startBikeRentEvent.getRentDate(), startBikeRentEvent.getCost()))
-                .commit();
+        mStartBikeRentEvent = startBikeRentEvent;
+        startHandler.obtainMessage(1).sendToTarget();
     }
+
 
     @Subscribe
     public void onStopRent(StopBikeRentEvent stopBikeRentEvent) {
+        mStopBikeRentEvent = stopBikeRentEvent;
+        stopHandler.obtainMessage(1).sendToTarget();
+    }
+
+    private Handler startHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            startRent();
+        }
+    };
+
+    private Handler stopHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            stopRent();
+        }
+    };
+
+    private void startRent() {
+        fragmentManager.popBackStack();
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, MainFragment.newInstance(mStartBikeRentEvent.getUsername(), mStartBikeRentEvent.getRentDate(), mStartBikeRentEvent.getCost()))
+                .commit();
+    }
+
+    private void stopRent() {
         fragmentManager.popBackStack();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, new EndFragment())
@@ -327,10 +355,10 @@ public class MainActivity extends Activity {
         now.setToNow();
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
-                bus.post(new StartBikeRentEvent("Алексей Коровянский", now, 120));
+                bus.post(new StartBikeRentEvent("Алексей Коровянский", now.toMillis(false), 120));
                 return false;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
-                bus.post(new StopBikeRentEvent(now, 500));
+                bus.post(new StopBikeRentEvent(now.toMillis(false), 500));
                 return false;
         }
         return super.onKeyDown(keyCode, event);
