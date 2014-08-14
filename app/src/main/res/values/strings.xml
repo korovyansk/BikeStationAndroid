@@ -7,5 +7,6 @@
     <string name="land_time">Время проката:</string>
     <string name="distance">Дистанция:</string>
     <string name="cost">Стоимость:</string>
+    <string name="touch_to_leave">Прикоснитесь к экрану для того, чтобы вернуться на экран ожидания</string>
 
 </resources>
