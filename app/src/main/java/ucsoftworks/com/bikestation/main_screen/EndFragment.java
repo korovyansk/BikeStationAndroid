@@ -30,6 +30,9 @@ public class EndFragment extends Fragment {
     private static final String ARG_RENT_TIME = "rentTime";
     private static final String ARG_COST = "cost";
 
+    private static final int FIRST_FORM = 0, SECOND_FORM = 1, THIRD_FORM = 2;
+    private static final String[] HOUR_FORMS = {"час", "часа", "часов"}, MINUTE_FORMS = {"минута", "минуты", "минут"};
+
     private Time endRentTime;
     private Time rentTime;
     private Float cost;
@@ -102,10 +105,30 @@ public class EndFragment extends Fragment {
         hours = (int) (difference / (1000 * 60 * 60));
         minutes = (int) (difference - (1000 * 60 * 60 * hours)) / (1000 * 60);
 
+
         costField.setText(String.format("%.0f %s", cost * difference / (1000 * 60), "р."));
-        timeField.setText(String.format("%d:%02d", hours, minutes));
+        timeField.setText(String.format("%d %s %d %s", hours, HOUR_FORMS[getRussianForm(hours)], minutes, MINUTE_FORMS[getRussianForm(minutes)]));
 
         return view;
+    }
+
+    private int getRussianForm(int num) {
+        int numBy100 = num % 100;
+        int numBy10 = num % 10;
+        if ((numBy100 > 4) && (numBy100 < 21))
+            return THIRD_FORM;
+        switch (numBy10) {
+            case 1:
+                return FIRST_FORM;
+            case 2:
+                return SECOND_FORM;
+            case 3:
+                return SECOND_FORM;
+            case 4:
+                return SECOND_FORM;
+            default:
+                return THIRD_FORM;
+        }
     }
 
     @OnClick(R.id.root_layout)
