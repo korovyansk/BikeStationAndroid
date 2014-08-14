@@ -65,9 +65,9 @@ public class GcmIntentService extends IntentService {
                     final JSONObject rent = new JSONObject(extras.getString(RENT_KEY));
                     final String code = extras.getString(CODE_KEY);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT);
+                    Date date = simpleDateFormat.parse(rent.getString("openned_at"));
                     if (code.equalsIgnoreCase(CODE_NEW)) {
                         final JSONObject user = new JSONObject(extras.getString(USER_KEY));
-                        Date date = simpleDateFormat.parse(rent.getString("openned_at"));
                         bus.post(new StartBikeRentEvent(
                                 String.format("%s %s", user.getString("name"), user.getString("surname")),
                                 date.getTime(),
@@ -75,8 +75,9 @@ public class GcmIntentService extends IntentService {
                         ));
                     }
                     if (code.equalsIgnoreCase(CODE_CLOSE)) {
-                        Date date = simpleDateFormat.parse(rent.getString("closed_at"));
+                        Date endDate = simpleDateFormat.parse(rent.getString("closed_at"));
                         bus.post(new StopBikeRentEvent(
+                                endDate.getTime(),
                                 date.getTime(),
                                 Float.parseFloat(rent.getString("total_cost"))
                         ));

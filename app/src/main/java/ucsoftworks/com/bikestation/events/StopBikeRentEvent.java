@@ -10,11 +10,17 @@ import java.util.Date;
 
 public class StopBikeRentEvent {
     private final long stopRentDate;
+    private final long rentDate;
     private final float totalCost;
 
-    public StopBikeRentEvent(long stopRentDate, float totalCost) {
+    public StopBikeRentEvent(long stopRentDate, long rentDate, float totalCost) {
         this.stopRentDate = stopRentDate;
+        this.rentDate = rentDate;
         this.totalCost = totalCost;
+    }
+
+    public long getRentDate() {
+        return rentDate;
     }
 
     public long getStopRentDate() {
