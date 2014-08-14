@@ -25,6 +25,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 import javax.inject.Inject;
@@ -42,6 +45,7 @@ import ucsoftworks.com.bikestation.application.SharedPreferencesManager;
 import ucsoftworks.com.bikestation.events.FinishTimeOutEvent;
 import ucsoftworks.com.bikestation.events.StartBikeRentEvent;
 import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
+import ucsoftworks.com.bikestation.geolocation.GeolocationService;
 
 
 public class MainActivity extends Activity {
@@ -58,9 +62,13 @@ public class MainActivity extends Activity {
 
     private StartBikeRentEvent mStartBikeRentEvent;
     private StopBikeRentEvent mStopBikeRentEvent;
+    private final Timer timer = new Timer();
 
     @Inject
     Bus bus;
+
+    @Inject
+    GeolocationService geolocationService;
 
     @Inject
     SharedPreferencesManager sharedPreferencesManager;
@@ -112,11 +120,18 @@ public class MainActivity extends Activity {
     protected void onStart() {
         super.onStart();
         bus.register(this);
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                sendLocationToBackend();
+            }
+        }, 0, 60_000);
     }
 
     @Override
     protected void onStop() {
         bus.unregister(this);
+        timer.purge();
         super.onStop();
     }
 
@@ -298,16 +313,37 @@ public class MainActivity extends Activity {
      */
     private void sendRegistrationIdToBackend() {
         try {
-            String uri = "http://smart-bikes.herokuapp.com/api/v1/bikes/register";
-            HttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost(uri);
-
+            String uri = "/api/v1/bikes/register";
             String json = new JSONObject()
                     .accumulate("uuid", getUuid())
                     .accumulate("app_id", SENDER_ID)
                     .accumulate("registration_id", regId)
                     .accumulate("name", Build.MODEL)
                     .toString();
+            sendRequestToBackend(uri, json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendLocationToBackend() {
+        try {
+            String uri = "/api/v1/bikes/" + getUuid() + "/location";
+            String json = new JSONObject()
+                    .accumulate("lat", geolocationService.getLatitude())
+                    .accumulate("lng", geolocationService.getLongitude())
+                    .toString();
+            sendRequestToBackend(uri, json);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendRequestToBackend(String uri, String json) {
+        try {
+            String baseUri = "http://smart-bikes.herokuapp.com";
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httpPost = new HttpPost(baseUri + uri);
 
             StringEntity se = new StringEntity(json);
             httpPost.setEntity(se);
