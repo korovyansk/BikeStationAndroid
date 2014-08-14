@@ -76,11 +76,11 @@ public class MainFragment extends Fragment {
      * @param cost     Parameter cost.
      * @return A new instance of fragment MainFragment.
      */
-    public static MainFragment newInstance(String username, Time rentTime, float cost) {
+    public static MainFragment newInstance(String username, long rentTime, float cost) {
         MainFragment fragment = new MainFragment();
         Bundle args = new Bundle();
         args.putString(ARG_USERNAME, username);
-        args.putLong(ARG_RENT_TIME, rentTime.toMillis(false));
+        args.putLong(ARG_RENT_TIME, rentTime);
         args.putFloat(ARG_COST, cost);
         fragment.setArguments(args);
         return fragment;

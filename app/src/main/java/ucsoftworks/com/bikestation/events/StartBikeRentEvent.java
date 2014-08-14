@@ -9,11 +9,11 @@ import java.util.Date;
  */
 public class StartBikeRentEvent {
 
-    private String username;
-    private Time rentDate;
-    private float cost;
+    private final String username;
+    private final long rentDate;
+    private final float cost;
 
-    public StartBikeRentEvent(String username, Time rentDate, float cost) {
+    public StartBikeRentEvent(String username, long rentDate, float cost) {
         this.username = username;
         this.rentDate = rentDate;
         this.cost = cost;
@@ -23,7 +23,7 @@ public class StartBikeRentEvent {
         return username;
     }
 
-    public Time getRentDate() {
+    public long getRentDate() {
         return rentDate;
     }
 
