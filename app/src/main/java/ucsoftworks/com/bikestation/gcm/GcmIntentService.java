@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.inject.Inject;
 
@@ -64,7 +65,8 @@ public class GcmIntentService extends IntentService {
                 try {
                     final JSONObject rent = new JSONObject(extras.getString(RENT_KEY));
                     final String code = extras.getString(CODE_KEY);
-                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
                     Date date = simpleDateFormat.parse(rent.getString("openned_at"));
                     if (code.equalsIgnoreCase(CODE_NEW)) {
                         final JSONObject user = new JSONObject(extras.getString(USER_KEY));
