@@ -11,7 +11,6 @@ import javax.inject.Inject;
 
 import dagger.ObjectGraph;
 import ucsoftworks.com.bikestation.modules.AppModule;
-import ucsoftworks.com.bikestation.modules.MockAppModule;
 
 /**
  * Created by Pasenchuk Victor on 31.07.14
