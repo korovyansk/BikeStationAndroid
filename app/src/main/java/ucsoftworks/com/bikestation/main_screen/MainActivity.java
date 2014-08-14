@@ -349,19 +349,5 @@ public class MainActivity extends Activity {
         sharedPreferencesManager.setRegId(regId);
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
-        Time now = new Time();
-        now.setToNow();
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_VOLUME_UP:
-                bus.post(new StartBikeRentEvent("Алексей Коровянский", now.toMillis(false), 120));
-                return false;
-            case KeyEvent.KEYCODE_VOLUME_DOWN:
-                bus.post(new StopBikeRentEvent(now.toMillis(false), 500));
-                return false;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
 
 }
