@@ -57,7 +57,7 @@ public class MainFragment extends Fragment {
             minutes = (int) (difference - (1000 * 60 * 60 * hours)) / (1000 * 60);
             seconds = (int) (difference - (1000 * 60 * 60 * hours) - (1000 * 60 * minutes)) / 1000;
 
-            distanceField.setText(String.format("%.3f %s", geolocationService.getDistance(), "км"));
+            distanceField.setText(String.format("%.3f %s", geolocationService.getDistance() / 1000, "км"));
             costField.setText(String.format("%.2f %s", cost * difference / (1000 * 60 * 60), "р."));
             timeField.setText(String.format("%d:%02d:%02d", hours, minutes, seconds));
         }
