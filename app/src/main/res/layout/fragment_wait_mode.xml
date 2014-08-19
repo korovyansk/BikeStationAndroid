@@ -5,6 +5,7 @@
     android:background="#0198a1">
 
     <ImageView
+        android:id="@+id/wait_mode_logo"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_gravity="center"
