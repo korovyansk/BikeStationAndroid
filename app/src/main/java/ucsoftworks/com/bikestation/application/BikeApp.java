@@ -25,6 +25,9 @@ public class BikeApp extends Application {
         super.onCreate();
         objectGraph = ObjectGraph.create(new AppModule(this));
         objectGraph.inject(this);
+        if (storage.isRegistered()) {
+            registered(storage.getUUID());
+        }
         prepare();
     }
 
@@ -39,7 +42,6 @@ public class BikeApp extends Application {
 
     private void plus(Object... modules) {
         objectGraph = objectGraph.plus(modules);
-        objectGraph.inject(this);
     }
 
     private void prepare() {

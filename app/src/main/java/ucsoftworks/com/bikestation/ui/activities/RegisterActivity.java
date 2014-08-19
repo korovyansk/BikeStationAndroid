@@ -26,6 +26,7 @@ public class RegisterActivity extends BikeActivity {
     @Subscribe
     public void onRegisteredEvent(RegisteredSuccessfullyEvent event) {
         startActivity(new Intent(this, WorkActivity.class));
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
 }
