@@ -37,7 +37,7 @@ public class AppUtils {
     }
 
     public static float dpToPx(Resources resources, int dp) {
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 14, resources.getDisplayMetrics());
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, resources.getDisplayMetrics());
     }
 
     private AppUtils() {
