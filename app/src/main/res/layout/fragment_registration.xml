@@ -1,0 +1,61 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+
+    <FrameLayout
+        android:id="@+id/registration_progress_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#bb000000">
+
+        <ProgressBar
+            android:id="@+id/registration_progress"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_gravity="center"
+            android:indeterminate="true"/>
+
+    </FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="400dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:id="@+id/registration_logo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_register_logo"/>
+
+        <Spinner
+            android:id="@+id/registration_bike_model"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_toRightOf="@id/registration_logo"
+            android:singleLine="true"
+            android:inputType="textNoSuggestions"
+            android:entries="@array/registration_bikes_models"
+            android:hint="@string/registration_bike_model_placeholder"/>
+
+        <Spinner
+            android:id="@+id/registration_bike_station"
+            android:layout_width="300dp"
+            android:layout_height="48dp"
+            android:layout_below="@id/registration_bike_model"
+            android:layout_toRightOf="@id/registration_logo"/>
+
+        <Button
+            android:id="@+id/registration_register"
+            android:layout_width="400dp"
+            android:layout_height="64dp"
+            android:layout_below="@id/registration_bike_station"
+            android:layout_marginTop="16dp"
+            android:text="@string/registration_register"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

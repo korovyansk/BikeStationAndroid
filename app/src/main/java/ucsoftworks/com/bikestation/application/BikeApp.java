@@ -2,53 +2,51 @@ package ucsoftworks.com.bikestation.application;
 
 import android.app.Application;
 
-import com.squareup.otto.Bus;
-
-import java.util.Timer;
-import java.util.TimerTask;
+import com.crashlytics.android.Crashlytics;
 
 import javax.inject.Inject;
 
 import dagger.ObjectGraph;
+import timber.log.Timber;
+import ucsoftworks.com.bikestation.BuildConfig;
+import ucsoftworks.com.bikestation.data.PersistentStorage;
 import ucsoftworks.com.bikestation.modules.AppModule;
+import ucsoftworks.com.bikestation.modules.RegisteredModule;
 
-/**
- * Created by Pasenchuk Victor on 31.07.14
- */
 public class BikeApp extends Application {
 
-    private ObjectGraph objectGraph;
-
-    final Timer timer = new Timer();
-
     @Inject
-    Bus bus;
+    PersistentStorage storage;
+
+    private ObjectGraph objectGraph;
 
     @Override
     public void onCreate() {
         super.onCreate();
         objectGraph = ObjectGraph.create(new AppModule(this));
-        inject(this);
-
-        set30SecTimer();
+        objectGraph.inject(this);
+        prepare();
     }
 
     public void inject(Object object) {
         objectGraph.inject(object);
     }
 
-    private void set30SecTimer() {
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-//                bus.post(new TimerEvent());
-            }
-        }, 0, 999);
+    public void registered(String uuid) {
+        storage.setUUID(uuid);
+        plus(new RegisteredModule(uuid));
     }
 
+    private void plus(Object... modules) {
+        objectGraph = objectGraph.plus(modules);
+        objectGraph.inject(this);
+    }
 
-    public void onTerminate() {
-        timer.cancel();
+    private void prepare() {
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+        Crashlytics.start(this);
     }
 
 }

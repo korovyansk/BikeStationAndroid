@@ -3,10 +3,29 @@
 
     <string name="app_name">Smart Bikes</string>
     <string name="smart_bikes_logo">Smart Bikes Logo</string>
-    <string name="end_of_landing">Спасибо! Ваш прокат завершён!</string>
-    <string name="land_time">Время проката:</string>
-    <string name="distance">Дистанция:</string>
-    <string name="cost">Стоимость:</string>
-    <string name="touch_to_leave">Прикоснитесь к экрану для того, чтобы вернуться на экран ожидания</string>
+
+    <string name="registration_bike_model_placeholder">Выберите модель велосипеда</string>
+    <string name="registration_bike_station_placeholder">Выберите вело-станцию</string>
+    <string name="registration_register">Зарегистрировать велосипед</string>
+
+    <string-array name="registration_bikes_models">
+        <item>Centurion Cross 4</item>
+        <item>Corratec Revolution XT 26"</item>
+        <item>Corratec C29 M. Cross 0.1 Gent</item>
+        <item>Fuji Bikes Captiva</item>
+        <item>Fuji Bikes Declaration</item>
+        <item>Fuji Bikes Crosstown 1.0</item>
+        <item>GT Karakoram Elite GTW</item>
+        <item>GT Avalanche Comp</item>
+        <item>GT Avalanche Sport</item>
+        <item>GT Timberline 1.0</item>
+        <item>GT Aggressor 2.0</item>
+        <item>Jamis Durango 29 Comp</item>
+        <item>Jamis Komodo</item>
+    </string-array>
+
+    <string name="rent_active_time">Время: </string>
+    <string name="rent_active_cost">Стоимость:</string>
+    <string name="rent_completed">Спасибо! Ваш прокат завершён!</string>
 
 </resources>

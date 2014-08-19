@@ -3,6 +3,7 @@ package ucsoftworks.com.bikestation.gcm;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.squareup.otto.Bus;
@@ -10,32 +11,27 @@ import com.squareup.otto.Bus;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
 import ucsoftworks.com.bikestation.application.BikeApp;
-import ucsoftworks.com.bikestation.events.StartBikeRentEvent;
-import ucsoftworks.com.bikestation.events.StopBikeRentEvent;
+import ucsoftworks.com.bikestation.events.StartRentEvent;
+import ucsoftworks.com.bikestation.events.StopRentEvent;
 
 
-/**
- * An {@link android.app.IntentService} subclass for handling asynchronous task requests in
- * a service on a separate handler thread.
- */
 public class GcmIntentService extends IntentService {
 
-    private static final String CODE_KEY = "code", RENT_KEY = "rent", USER_KEY = "user";
-    private static final String CODE_NEW = "new", CODE_CLOSE = "close";
+    @Inject
+    Bus bus;
+
+    @Inject
+    Handler handler;
 
     public GcmIntentService() {
         super("GcmIntentService");
     }
-
-    @Inject
-    Bus bus;
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -45,8 +41,6 @@ public class GcmIntentService extends IntentService {
         bikeApp.inject(this);
 
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
-        // The getMessageType() intent parameter must be the intent you received
-        // in your BroadcastReceiver.
         String messageType = gcm.getMessageType(intent);
 
         if (!(extras != null && extras.isEmpty())) {  // has effect of unparcelling Bundle
@@ -56,36 +50,32 @@ public class GcmIntentService extends IntentService {
              * any message types you're not interested in, or that you don't
              * recognize.
              */
-            if (GoogleCloudMessaging.
-                    MESSAGE_TYPE_MESSAGE.equals(messageType)) {
-//                bus.register(this);
-//
-//                bus.unregister(this);
-
+            if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 try {
-                    final JSONObject rent = new JSONObject(extras.getString(RENT_KEY));
-                    final String code = extras.getString(CODE_KEY);
+                    final String code = extras.getString("code");
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
                     simpleDateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
-                    Date date = simpleDateFormat.parse(rent.getString("openned_at"));
-                    if (code.equalsIgnoreCase(CODE_NEW)) {
-                        final JSONObject user = new JSONObject(extras.getString(USER_KEY));
-                        bus.post(new StartBikeRentEvent(
-                                String.format("%s %s", user.getString("name"), user.getString("surname")),
-                                date.getTime(),
-                                Float.parseFloat(rent.getString("cost"))
-                        ));
+                    if (code.equalsIgnoreCase("new")) {
+                        final JSONObject user = new JSONObject(extras.getString("user"));
+                        final String name = user.getString("name");
+                        final String surname = user.getString("surname");
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                bus.post(new StartRentEvent(String.format("%s %s", name, surname)));
+                            }
+                        });
                     }
-                    if (code.equalsIgnoreCase(CODE_CLOSE)) {
-                        Date endDate = simpleDateFormat.parse(rent.getString("closed_at"));
-                        bus.post(new StopBikeRentEvent(
-                                endDate.getTime(),
-                                date.getTime(),
-                                Float.parseFloat(rent.getString("total_cost"))
-                        ));
+                    if (code.equalsIgnoreCase("close")) {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                bus.post(new StopRentEvent());
+                            }
+                        });
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Timber.e(e, "exception in GcmIntentService.handleIntent");
                 }
 
             }
