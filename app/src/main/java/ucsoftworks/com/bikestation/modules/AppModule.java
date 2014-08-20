@@ -95,8 +95,13 @@ public class AppModule {
     }
 
     @Provides @Named("AllowHackEvents")
-     boolean allowHackEvents() {
+    boolean allowHackEvents() {
         return true;
+    }
+
+    @Provides @Named("EnableAnimations")
+    boolean enableAnimations() {
+        return false;
     }
 
     @Provides @Named("LocationTrackPeriodMs")
