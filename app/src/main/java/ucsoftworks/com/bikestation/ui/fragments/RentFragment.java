@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
@@ -17,13 +18,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.InjectView;
+import butterknife.OnClick;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 import timber.log.Timber;
 import ucsoftworks.com.bikestation.R;
+import ucsoftworks.com.bikestation.events.LocationChangedEvent;
 import ucsoftworks.com.bikestation.events.ReturnToWaitModeEvent;
 import ucsoftworks.com.bikestation.events.StopRentEvent;
 import ucsoftworks.com.bikestation.events.hack.VolumeDownHackEvent;
+import ucsoftworks.com.bikestation.events.hack.VolumeUpHackEvent;
 import ucsoftworks.com.bikestation.helpers.UITimer;
 import ucsoftworks.com.bikestation.services.ApiService;
 import ucsoftworks.com.bikestation.services.LocationService;
@@ -34,6 +38,9 @@ public class RentFragment extends BikeFragment {
 
     @Inject @Named("LocationTrackPeriodMs")
     int locationTrackPeriod;
+
+    @Inject @Named("RentOffsetMs")
+    int rentOffsetMs;
 
     @Inject @Named("UUID")
     String uuid;
@@ -101,40 +108,11 @@ public class RentFragment extends BikeFragment {
             @Override
             public void run() {
                 Date now = new Date();
-                long diff = now.getTime() - startTime.getTime();
+                long diff = rentOffsetMs + now.getTime() - startTime.getTime();
                 rentTimeText.setText(AppUtils.formatStopWatch(diff));
                 rentCostText.setText(AppUtils.calculateCost(diff) + " руб.");
             }
         }, 0, 999, "stopwatch");
-        uiTimer.schedule(new UITimer.Task() {
-
-            private UITimer.Task task() {
-                return this;
-            }
-
-            @Override
-            public void run() {
-                final Location location = locationService.getLocation();
-                if (location != null) {
-                    apiService.track(uuid, location.getLatitude(), location.getLongitude())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(
-                                    new Action1<Void>() {
-                                        @Override
-                                        public void call(Void aVoid) {
-                                            Timber.d("Location %s tracked successfully", location);
-                                            uiTimer.schedule(task(), locationTrackPeriod, "location_tracker");
-                                        }
-                                    },
-                                    new Action1<Throwable>() {
-                                        @Override
-                                        public void call(Throwable throwable) {
-                                            Timber.d(throwable, "exception during tracking location");
-                                        }
-                                    });
-                }
-            }
-        }, 1000, "location_tracker");
     }
 
     @Override
@@ -142,7 +120,6 @@ public class RentFragment extends BikeFragment {
         super.onStop();
         locationService.stop();
         uiTimer.cancel("stopwatch");
-        uiTimer.cancel("location_tracker");
     }
 
     @Override
@@ -152,10 +129,60 @@ public class RentFragment extends BikeFragment {
         outState.putLong("startTime", startTime.getTime());
     }
 
+    @OnClick(R.id.rent_action_music)
+    /*injected*/ void onClickActionMusic() {
+        Toast.makeText(getActivity(), "Проигрывание любимых треков\r\n(не реализовано в данной версии)",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.rent_action_fitness)
+    /*injected*/ void onClickActionFitness() {
+        Toast.makeText(getActivity(), "Фитнесс тренер\r\n(не реализовано в данной версии)",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @OnClick(R.id.rent_action_map)
+    /*injected*/ void onClickActionMap() {
+        getActivity().getFragmentManager().beginTransaction()
+                .replace(R.id.default_container_placeholder, new CityMapFragment(), "map")
+                .addToBackStack("map")
+                .commit();
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    @Subscribe
+    public void onLocationChanged(LocationChangedEvent event) {
+        final Location location = event.getLocation();
+        apiService.track(uuid, location.getLatitude(), location.getLongitude())
+                .subscribeOn(Schedulers.io())
+                .subscribe(
+                        new Action1<Void>() {
+                            @Override
+                            public void call(Void aVoid) {
+                                Timber.d("%s tracked successfully", location);
+                            }
+                        },
+                        new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                Timber.d(throwable, "exception during tracking location");
+                            }
+                        });
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     @Subscribe
     public void onVolumeDownHackEvent(VolumeDownHackEvent event) {
         postToBus(new StopRentEvent());
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    @Subscribe
+    public void onVolumeUpHackEvent(VolumeUpHackEvent event) {
+        getActivity().getFragmentManager().beginTransaction()
+                .replace(R.id.default_container_placeholder, new CityMapFragment(), "map")
+                .addToBackStack("map")
+                .commit();
     }
 
     @SuppressWarnings("UnusedDeclaration") //used by event bus

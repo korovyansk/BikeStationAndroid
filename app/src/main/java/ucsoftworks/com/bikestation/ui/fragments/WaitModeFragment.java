@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.squareup.otto.Subscribe;
 
@@ -17,6 +18,7 @@ import javax.inject.Named;
 
 import butterknife.InjectView;
 import ucsoftworks.com.bikestation.R;
+import ucsoftworks.com.bikestation.data.PersistentStorage;
 import ucsoftworks.com.bikestation.events.StartRentEvent;
 import ucsoftworks.com.bikestation.events.hack.VolumeUpHackEvent;
 import ucsoftworks.com.bikestation.helpers.EndAnimatorListener;
@@ -26,6 +28,12 @@ public class WaitModeFragment extends BikeFragment {
 
     @Inject @Named("EnableAnimations")
     boolean enableAnimations;
+
+    @Inject
+    PersistentStorage storage;
+
+    @InjectView(R.id.wait_mode_frame)
+    ViewGroup frame;
 
     @InjectView(R.id.wait_mode_logo)
     ImageView logoImage;
@@ -38,6 +46,14 @@ public class WaitModeFragment extends BikeFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        frame.setLongClickable(true);
+        frame.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(getActivity(), storage.getBikeModel(), Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
         if (enableAnimations) {
             logoImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,7 +99,7 @@ public class WaitModeFragment extends BikeFragment {
     @SuppressWarnings("UnusedDeclaration")
     @Subscribe
     public void onVolumeUpHackEvent(VolumeUpHackEvent event) {
-        postToBus(new StartRentEvent("Алексей Коровянский"));
+        postToBus(new StartRentEvent("Виктор Назаров"));
     }
 
 }

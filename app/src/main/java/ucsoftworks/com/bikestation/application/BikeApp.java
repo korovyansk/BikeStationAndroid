@@ -26,7 +26,7 @@ public class BikeApp extends Application {
         objectGraph = ObjectGraph.create(new AppModule(this));
         objectGraph.inject(this);
         if (storage.isRegistered()) {
-            registered(storage.getUUID());
+            plus(new RegisteredModule(storage.getUUID()));
         }
         prepare();
     }
@@ -35,8 +35,9 @@ public class BikeApp extends Application {
         objectGraph.inject(object);
     }
 
-    public void registered(String uuid) {
+    public void registered(String uuid, String bikeModel) {
         storage.setUUID(uuid);
+        storage.setBikeModel(bikeModel);
         plus(new RegisteredModule(uuid));
     }
 

@@ -2,125 +2,98 @@ package ucsoftworks.com.bikestation.services.real;
 
 import android.content.Context;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.squareup.otto.Bus;
+
+import timber.log.Timber;
+import ucsoftworks.com.bikestation.events.LocationChangedEvent;
 import ucsoftworks.com.bikestation.services.LocationService;
 
-public class RealLocationService implements LocationListener, LocationService {
+public class RealLocationService implements LocationService, LocationListener {
 
-    private final Context mContext;
+    private final LocationClient locationClient;
+    private final Bus bus;
+    private Location location;
 
-    // flag for GPS status
-    public boolean isGPSEnabled = false;
+    public RealLocationService(Context context, final int updateIntervalMs, Bus bus) {
+        this.bus = bus;
+        this.locationClient = new LocationClient(context,
+                new GooglePlayServicesClient.ConnectionCallbacks() {
+                    @Override
+                    public void onConnected(Bundle bundle) {
+                        Timber.d("onConnected to LocationClient");
+                        final Location location = locationClient.getLastLocation();
+                        Timber.d("retrieve last known %s", location);
+                        if (location != null) {
+                            updateLocationAndPost(location);
+                        }
+                        locationClient.requestLocationUpdates(buildLocationRequest(updateIntervalMs), RealLocationService.this);
+                    }
 
-    // flag for network status
-    boolean isNetworkEnabled = false;
-
-    // flag for GPS status
-    boolean canGetLocation = false;
-
-    Location mLocation; // mLocation
-
-    // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 1; // 10 meters
-
-    // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000; // 1 minute
-
-    // Declaring a Location Manager
-    protected LocationManager locationManager;
-
-    public RealLocationService(Context context) {
-        this.mContext = context;
-        init();
+                    @Override
+                    public void onDisconnected() {
+                        Timber.w("onDisconnected from LocationClient");
+                    }
+                },
+                new GoogleApiClient.OnConnectionFailedListener() {
+                    @Override
+                    public void onConnectionFailed(ConnectionResult connectionResult) {
+                        Timber.w("onConnectionFailed to LocationClient with connectionResult %s",
+                                connectionResult);
+                    }
+                }
+        );
     }
 
-    public void init() {
-        try {
-            locationManager = (LocationManager) mContext
-                    .getSystemService(Context.LOCATION_SERVICE);
+    @Override
+    public void start() {
+        if (!locationClient.isConnected() && !locationClient.isConnecting()) {
+            Timber.d("connecting to LocationClient");
+            locationClient.connect();
+        } else {
+            Timber.w("Called RealLocationService start method, when locationClient is already %s",
+                    locationClient.isConnected() ? "connected" : "connecting");
+        }
+    }
 
+    @Override
+    public Location getLocation() {
+        return this.location;
+    }
 
-            // getting GPS status
-            isGPSEnabled = locationManager
-                    .isProviderEnabled(LocationManager.GPS_PROVIDER);
-
-            Log.v("isGPSEnabled", "=" + isGPSEnabled);
-
-            // getting network status
-            isNetworkEnabled = locationManager
-                    .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-            Log.v("isNetworkEnabled", "=" + isNetworkEnabled);
-
-            if (isGPSEnabled || isNetworkEnabled) {
-                this.canGetLocation = true;
-                mLocation = null;
-                // if GPS Enabled get lat/long using GPS Services
-                if (isGPSEnabled) {
-                    locationManager.requestLocationUpdates(
-                            LocationManager.GPS_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                    Log.d("GPS Enabled", "GPS Enabled");
-                    if (locationManager != null) {
-                        mLocation = locationManager
-                                .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    }
-                }
-
-                if (isNetworkEnabled) {
-                    if (mLocation == null) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.NETWORK_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("Network", "Network");
-                        if (locationManager != null) {
-                            mLocation = locationManager
-                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                        }
-                    }
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public void stop() {
+        if (locationClient.isConnected() || locationClient.isConnecting()) {
+            Timber.d("disconnecting from LocationClient");
+            locationClient.disconnect();
+        } else {
+            Timber.w("Called RealLocationService stop method, when locationClient is not connected or connecting");
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
-        mLocation = location;
+        Timber.d("onLocationChanged %s", location);
+        updateLocationAndPost(location);
     }
 
-    @Override
-    public void onProviderDisabled(String provider) {
+    private void updateLocationAndPost(Location location) {
+        this.location = new Location(location);
+        this.bus.post(new LocationChangedEvent(location));
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public void start() {
-
-    }
-
-    @Override
-    public Location getLocation() {
-        return mLocation;
-    }
-
-    @Override
-    public void stop() {
-
+    private static LocationRequest buildLocationRequest(int updateIntervalMs) {
+        return LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_LOW_POWER)
+                .setInterval(updateIntervalMs)
+                .setFastestInterval(1000)
+                .setSmallestDisplacement(10);
     }
 }

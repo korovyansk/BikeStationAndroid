@@ -25,4 +25,14 @@ public class RealPersistentStorage implements PersistentStorage {
     public void setUUID(String uuid) {
         sharedPreferences.edit().putString("uuid", uuid).apply();
     }
+
+    @Override
+    public String getBikeModel() {
+        return sharedPreferences.getString("bike_model", "unknown");
+    }
+
+    @Override
+    public void setBikeModel(String bikeModel) {
+        sharedPreferences.edit().putString("bike_model", bikeModel).apply();
+    }
 }

@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.CycleInterpolator;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
@@ -146,11 +145,11 @@ public class RegistrationFragment extends BikeFragment {
     @SuppressWarnings("UnusedDeclaration") // used by injector
     @OnClick(R.id.registration_register)
     /*injected*/ void onClickRegisterButton() {
-        final String bikeName = bikeModelSpinner.getSelectedItem().toString();
+        final String bikeModel = bikeModelSpinner.getSelectedItem().toString();
         final Map<String, Object> bikeStationMap = (Map<String, Object>) bikeStationSpinner.getSelectedItem();
         final int stationId = (int) bikeStationMap.get("station_id");
 
-        if (bikeName.equals(resources.getString(R.string.registration_bike_model_placeholder))) {
+        if (bikeModel.equals(resources.getString(R.string.registration_bike_model_placeholder))) {
             bikeModelSpinner.animate()
                     .x(bikeModelSpinner.getX() + AppUtils.dpToPx(resources, 10))
                     .setInterpolator(new CycleInterpolator(5));
@@ -183,7 +182,7 @@ public class RegistrationFragment extends BikeFragment {
         }).flatMap(new Func1<String, Observable<?>>() {
             @Override
             public Observable<?> call(String regId) {
-                return apiService.register(uuid, Config.GCM_APP_ID, regId, bikeName, stationId);
+                return apiService.register(uuid, Config.GCM_APP_ID, regId, bikeModel, stationId);
             }
         }))
         .subscribeOn(Schedulers.io())
@@ -191,14 +190,16 @@ public class RegistrationFragment extends BikeFragment {
                 new Action1<Object>() {
                     @Override
                     public void call(Object o) {
-                        getApp().registered(uuid);
+                        getApp().registered(uuid, bikeModel);
                         operationRunning(false);
+                        Timber.d("Registered successfully");
                         postToBus(new RegisteredSuccessfullyEvent());
                     }
                 }, new Action1<Throwable>() {
                     @Override
                     public void call(Throwable throwable) {
                         operationRunning(false);
+                        Timber.d(throwable, "Error during registration");
                         Toast.makeText(getActivity(), "Error during registration", Toast.LENGTH_SHORT).show();
                     }
                 }

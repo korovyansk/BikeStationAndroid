@@ -20,10 +20,11 @@ import ucsoftworks.com.bikestation.gcm.GcmIntentService;
 import ucsoftworks.com.bikestation.helpers.UITimer;
 import ucsoftworks.com.bikestation.services.ApiService;
 import ucsoftworks.com.bikestation.services.LocationService;
-import ucsoftworks.com.bikestation.services.mock.MockLocationService;
+import ucsoftworks.com.bikestation.services.real.RealLocationService;
 import ucsoftworks.com.bikestation.ui.activities.EntryActivity;
 import ucsoftworks.com.bikestation.ui.activities.RegisterActivity;
 import ucsoftworks.com.bikestation.ui.activities.WorkActivity;
+import ucsoftworks.com.bikestation.ui.fragments.CityMapFragment;
 import ucsoftworks.com.bikestation.ui.fragments.RegistrationFragment;
 import ucsoftworks.com.bikestation.ui.fragments.WaitModeFragment;
 
@@ -32,7 +33,7 @@ import ucsoftworks.com.bikestation.ui.fragments.WaitModeFragment;
         injects = {
             BikeApp.class, GcmIntentService.class,
             EntryActivity.class, RegisterActivity.class, WorkActivity.class,
-            RegistrationFragment.class, WaitModeFragment.class
+            RegistrationFragment.class, WaitModeFragment.class, CityMapFragment.class
         }
 )
 public class AppModule {
@@ -58,19 +59,14 @@ public class AppModule {
         return bikeApp.getResources();
     }
 
-//    @Provides
-//    SharedPreferencesManager provideSharedPreferencesManager() {
-//        return new SharedPreferencesManager(bikeApp);
-//    }
-
     @Provides @Singleton
     UITimer provideUITimer() {
         return new UITimer();
     }
 
     @Provides @Singleton
-    LocationService provideLocationService(UITimer uiTimer) {
-        return new MockLocationService(uiTimer);
+    LocationService provideLocationService(@Named("LocationTrackPeriodMs") int locationTrackPeriodMs, Bus bus) {
+        return new RealLocationService(bikeApp, locationTrackPeriodMs, bus);
     }
 
     @Provides @Singleton
@@ -107,5 +103,10 @@ public class AppModule {
     @Provides @Named("LocationTrackPeriodMs")
     int provideLocationTrackPeriodMs() {
         return 1000;
+    }
+
+    @Provides @Named("RentOffsetMs")
+    int provideRentOffsetMs() {
+        return 0; //2 * 60 * 60 * 1000;
     }
 }
